@@ -104,3 +104,20 @@ func Tarik(c *fiber.Ctx) error {
 		"data":   user.Saldo,
 	})
 }
+
+func Saldo(c *fiber.Ctx) error {
+	noRekening := c.Params("no_rekening")
+	var user model.User
+
+	if err := config.DB.Where("no_rekening = ?", noRekening).First(&user).Error; err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"status":  false,
+			"message": err.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status": true,
+		"saldo":  user.Saldo,
+	})
+}
