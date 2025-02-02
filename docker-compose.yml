@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  postgreserver:
+    container_name: postgreserver
+    environment:
+      - POSTGRES_PASSWORD=fakhrizal123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=tabungango
+    image: postgres:17
+    ports:
+      - "8080:5432"
+    networks:
+      - tabungango-networks
+  tabungango:
+    container_name: tabungango
+    image: app-tabungango:1.0
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgreserver
+    env_file:
+      - .env
+    networks:
+      - tabungango-networks
+
+networks:
+  tabungango-networks:
+    name: tabungango-networks
+    driver: bridge
+    
