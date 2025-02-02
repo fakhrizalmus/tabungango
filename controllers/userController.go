@@ -18,8 +18,8 @@ func Register(c *fiber.Ctx) error {
 	err := c.BodyParser(&req)
 	if err != nil {
 		return c.JSON(fiber.Map{
-			"status":  false,
-			"message": err.Error(),
+			"status": false,
+			"remark": err.Error(),
 		})
 	}
 
@@ -36,8 +36,8 @@ func Register(c *fiber.Ctx) error {
 
 	if err := config.DB.Create(&req).Error; err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": "NIK atau No HP sudah digunakan!",
+			"status": false,
+			"remark": "NIK atau No HP sudah digunakan!",
 		})
 	}
 
@@ -62,15 +62,15 @@ func Tabung(c *fiber.Ctx) error {
 
 	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": err.Error(),
+			"status": false,
+			"remark": err.Error(),
 		})
 	}
 
 	if err := config.DB.Where("no_rekening = ?", req.NoRekening).First(&user).Error; err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": "No Rekening tidak ditemukan!",
+			"status": false,
+			"remark": "No Rekening tidak ditemukan!",
 		})
 	}
 	user.Saldo = user.Saldo + req.Nominal
@@ -96,21 +96,21 @@ func Tarik(c *fiber.Ctx) error {
 
 	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": err.Error(),
+			"status": false,
+			"remark": err.Error(),
 		})
 	}
 
 	if err := config.DB.Where("no_rekening = ?", req.NoRekening).First(&user).Error; err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": "No Rekening tidak ditemukan!",
+			"status": false,
+			"remark": "No Rekening tidak ditemukan!",
 		})
 	}
 	if user.Saldo < req.Nominal {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": "Saldo tidak mencukupi",
+			"status": false,
+			"remark": "Saldo tidak mencukupi",
 		})
 	}
 	user.Saldo = user.Saldo - req.Nominal
@@ -127,8 +127,8 @@ func Saldo(c *fiber.Ctx) error {
 
 	if err := config.DB.Where("no_rekening = ?", noRekening).First(&user).Error; err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"status":  false,
-			"message": "No Rekening tidak ditemukan!",
+			"status": false,
+			"remark": "No Rekening tidak ditemukan!",
 		})
 	}
 
